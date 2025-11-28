@@ -1,0 +1,31 @@
+[
+  {
+    "id": "halloween_2025",
+    "title": "OFFLIMITS Halloween 2025",
+    "start": "2025-10-31T23:00",
+    "end": "2025-11-01T03:00",
+    "location": "Taboo, Akadeemia tee 24",
+    "cover": "assets/gallery/halloween_2025/halloween.jpg",
+    "excerpt": "Costume contest, themed cocktails and spooky mixes.",
+    "tags": ["DJ"]
+  },
+  {
+    "id": "brazilian_2025",
+    "title": "Brazilian Funk Night 2025",
+    "start": "2025-06-06T22:00",
+    "end": "2025-06-07T03:00",
+    "location": "Taboo, Akadeemia tee 24",
+    "cover": "assets/gallery/brazilian_2025/brazilian.jpg",
+    "excerpt": "Get tropical with brazilian funk ",
+    "tags": ["DJ"]
+  },
+  {
+    "id": "martini_thu",
+    "title": "Martini Nights",
+    "recurring": { "freq": "weekly", "byDay": ["TH"], "time": "19:00" },
+    "location": "Taboo, Akadeemia tee 24",
+    "cover": "assets/gallery/martini_night.png",
+    "excerpt": "Pick your martini and own the night every Thursday.",
+    "tags": ["Fun"]
+  }
+]

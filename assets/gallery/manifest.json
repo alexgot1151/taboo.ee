@@ -1,0 +1,22 @@
+[
+  {
+    "event": "Birthdays",
+    "slug": "birthdays",
+    "date": "2025",
+    "cover": "assets/gallery/birthdays/cake.png",
+    "photos": [
+      "assets/gallery/birthdays/1.jpg",
+      "assets/gallery/birthdays/2.jpg",
+      "assets/gallery/birthdays/3.jpg",
+      "assets/gallery/birthdays/4.webp",
+      "assets/gallery/birthdays/5.webp",
+      "assets/gallery/birthdays/6.jpg",
+      "assets/gallery/birthdays/8.jpg",
+      "assets/gallery/birthdays/9.jpg",
+      "assets/gallery/birthdays/10.jpg",
+      "assets/gallery/birthdays/11.jpg",
+      "assets/gallery/birthdays/12.jpg",
+      "assets/gallery/birthdays/13.jpg"
+    ]
+   }
+]

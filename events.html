@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Taboo — Events</title>
+  <meta name="theme-color" content="#030115">
+  <link rel="icon" href="assets/logo.png" type="image/png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <!-- Shared header -->
+  <div data-include="header.html"></div>
+
+  <main>
+    <section class="section">
+      <div class="container">
+        <div class="events-head">
+          <div>
+            <h1 class="events-title">Events</h1>
+            <p class="events-sub">Upcoming nights, recurring vibes, and highlights from the past.</p>
+          </div>
+          <div id="eventsFilters" class="events-tabs">
+            <button class="chip chip--active" data-filter="upcoming">Upcoming</button>
+            <button class="chip" data-filter="recurring">Recurring</button>
+            <button class="chip" data-filter="past">Past</button>
+            <button class="chip" data-filter="all">All</button>
+          </div>
+        </div>
+
+        <div class="events-group" id="group-upcoming">
+          <h2 class="events-group-title">Upcoming</h2>
+          <div class="events-grid" id="listUpcoming"></div>
+        </div>
+
+        <div class="events-group" id="group-recurring">
+          <h2 class="events-group-title">Recurring</h2>
+          <div class="events-grid" id="listRecurring"></div>
+        </div>
+
+        <div class="events-group" id="group-past">
+          <h2 class="events-group-title">Past</h2>
+          <div class="events-grid" id="listPast"></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Lightbox (same pattern as gallery) -->
+  <div id="lightbox" class="lightbox" role="dialog" aria-modal="true" aria-label="Image preview">
+    <div class="lightbox-inner">
+      <button class="lightbox-close" aria-label="Close">✕</button>
+      <img id="lightboxImg" alt="Preview">
+      <div id="lightboxCaption" class="lightbox-caption"></div>
+    </div>
+  </div>
+
+
+  <!-- Shared footer -->
+  <div data-include="footer.html"></div>
+
+  <!-- includes + site scripts -->
+  <script src="js/include.js"></script>
+  <script>includeHTML();</script>
+  <script src="js/script.js"></script>
+  <script src="js/events.js"></script>
+</body>
+</html>

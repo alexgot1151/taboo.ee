@@ -1,0 +1,12 @@
+STDIN
+# Ignore all image files
+*.jpg
+*.jpeg
+*.png
+*.gif
+*.webp
+*.svg
+*.bmp
+*.tif
+*.tiff
+*.heic

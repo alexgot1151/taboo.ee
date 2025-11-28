@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Taboo — Gallery</title>
+  <meta name="theme-color" content="#030115">
+  <link rel="icon" href="assets/logo.png" type="image/png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div data-include="header.html"></div>
+
+  <main>
+    <section class="section">
+      <div class="container section-head">
+        <h1>Gallery</h1>
+        <div class="container" id="galleryFilters" style="margin-top:10px;"></div>
+        <p>Snapshots from events and cozy nights. Follow <a href="https://www.instagram.com/taboo.ee/" target="_blank" rel="noopener">@taboo.ee</a> for more.</p>
+      </div>
+      <div class="container">
+        <div id="galleryGrid" class="gallery"></div>
+      </div>
+    </section>
+  </main>
+
+  <div id="lightbox" class="lightbox" role="dialog" aria-modal="true" aria-label="Image preview">
+    <div class="lightbox-inner">
+      <button class="lightbox-close" aria-label="Close">✕</button>
+      <img id="lightboxImg" alt="Preview">
+      <div id="lightboxCaption" class="lightbox-caption"></div>
+    </div>
+  </div>
+
+  <div data-include="footer.html"></div>
+
+  <script src="js/script.js"></script>
+  <script src="js/include.js"></script>
+  <script src="js/gallery.js"></script>
+</body>
+</html>

@@ -1,10 +1,8 @@
-// js/gallery.js — event albums + lightbox + optional filters
 (async function () {
   const grid = document.getElementById('galleryGrid');
   const filtersBox = document.getElementById('galleryFilters');
   if (!grid) return;
 
-  // Lightbox bindings (uses markup already in gallery.html)
   const lb = document.getElementById('lightbox');
   const lbImg = document.getElementById('lightboxImg');
   const lbCap = document.getElementById('lightboxCaption');
@@ -20,14 +18,12 @@
   lbClose.addEventListener('click', closeLB);
   document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLB(); });
 
-  // Load albums
   async function loadManifest() {
     const res = await fetch('assets/gallery/manifest.json', { cache: 'no-cache' });
     if (!res.ok) throw new Error('manifest not found');
     return res.json();
   }
 
-  // UI helpers
   function pill(label, active) {
     const a = document.createElement('button');
     a.className = 'chip' + (active ? ' chip--active' : '');
@@ -49,7 +45,6 @@
     const gallery = document.createElement('div');
     gallery.className = 'album-grid';
 
-    // paginate per album
     const PAGE = 6;
     let shown = 0;
     function renderMore() {
@@ -77,7 +72,6 @@
 
     wrapper.appendChild(head);
     if (album.cover) {
-      // Optional big cover on top (click opens lightbox)
       const coverWrap = document.createElement('div');
       coverWrap.className = 'album-cover';
       coverWrap.innerHTML = `<img src="${album.cover}" alt="${album.event} cover" loading="lazy">`;
@@ -90,7 +84,6 @@
     return wrapper;
   }
 
-  // Filter by event slug via chips or URL hash #event=slug
   function getHashEvent() {
     const m = location.hash.match(/event=([^&]+)/);
     return m ? decodeURIComponent(m[1]) : null;
@@ -103,7 +96,6 @@
 
   const albums = await loadManifest();
 
-  // Build chips (All + one per event)
   if (filtersBox) {
     filtersBox.innerHTML = '';
     const all = pill('All', !getHashEvent());
@@ -121,7 +113,6 @@
     grid.innerHTML = '';
     (slug ? albums.filter(a => a.slug === slug) : albums)
     .forEach(a => grid.appendChild(albumSection(a)));
-    // update active chip styles
     if (filtersBox) {
       filtersBox.querySelectorAll('.chip').forEach(ch => ch.classList.remove('chip--active'));
       const target = [...filtersBox.querySelectorAll('.chip')].find(b => b.textContent === (slug ? albums.find(a=>a.slug===slug)?.event : 'All'));

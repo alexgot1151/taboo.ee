@@ -1,4 +1,3 @@
-// js/events.js — renders upcoming, recurring, past events from assets/events.json
 (function () {
   const elUpcoming = document.getElementById('listUpcoming');
   const elRecurring = document.getElementById('listRecurring');
@@ -16,7 +15,6 @@
   function parseDate(s) { return s ? new Date(s) : null; }
 
   function nextWeeklyOccurrence(rule) {
-    // rule = { byDay: ["FR","SA"], time: "20:00" }
     if (!rule || !rule.byDay || !rule.byDay.length) return null;
     const now = new Date();
     const [h, m] = (rule.time || "00:00").split(':').map(Number);
@@ -29,7 +27,7 @@
       const diff = (targetDow - d.getDay() + 7) % 7;
       d.setDate(d.getDate() + diff);
       d.setHours(h||0, m||0, 0, 0);
-      if (d < now) d.setDate(d.getDate() + 7); // next week
+      if (d < now) d.setDate(d.getDate() + 7);
       if (!best || d < best) best = d;
     }
     return best;
@@ -60,7 +58,6 @@
     const a = document.createElement('article');
     a.className = 'event-card card glass';
 
-    // cover
     if (ev.cover) {
       const cover = document.createElement('div');
       cover.className = 'event-cover';
@@ -71,7 +68,6 @@
     const body = document.createElement('div');
     body.className = 'event-body';
 
-    // title + badges
     const head = document.createElement('div');
     head.className = 'event-head';
     const h3 = document.createElement('h3');
@@ -88,7 +84,6 @@
     head.appendChild(h3);
     head.appendChild(badges);
 
-    // meta (date/time + location)
     const meta = document.createElement('div');
     meta.className = 'event-meta';
     const start = parseDate(ev.start);
@@ -101,7 +96,6 @@
       ${ev.location ? `<div class="event-where">${ev.location}</div>` : ''}
     `;
 
-    // excerpt
     const p = document.createElement('p');
     p.className = 'event-excerpt';
     p.textContent = ev.excerpt || '';
@@ -129,17 +123,14 @@
       const start = parseDate(ev.start);
       const end = parseDate(ev.end) || start;
       if (!start) continue;
-      // Ongoing or future → Upcoming
       if (end >= now0) upcoming.push({ ev, start, end });
       else past.push({ ev, start, end });
     }
 
-    // sort
     upcoming.sort((a,b) => a.start - b.start);
     recurring.sort((a,b) => (a.next || Infinity) - (b.next || Infinity));
-    past.sort((a,b) => b.start - a.start); // newest past first
+    past.sort((a,b) => b.start - a.start);
 
-    // mount
     elUpcoming.innerHTML = '';
     elRecurring.innerHTML = '';
     elPast.innerHTML = '';
@@ -179,10 +170,10 @@
       elUpcoming.innerHTML = '<p class="event-empty">No events to show yet.</p>';
     });
 })();
-// Lightbox for Events page (reuses the markup on events.html)
+
 (function(){
   const lb = document.getElementById('lightbox');
-  if (!lb) return; // safety
+  if (!lb) return;
 
   const lbImg = document.getElementById('lightboxImg');
   const lbCap = document.getElementById('lightboxCaption');
@@ -196,16 +187,13 @@
   }
   function closeLB(){ lb.classList.remove('open'); }
 
-  // Close interactions
   lb.addEventListener('click', (e) => { if (e.target === lb) closeLB(); });
   if (lbClose) lbClose.addEventListener('click', closeLB);
   document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeLB(); });
 
-  // Delegate clicks on event cover images
   document.addEventListener('click', (e) => {
     const img = e.target.closest('.event-cover img');
     if (!img) return;
-    // Caption from the card title
     const card = img.closest('.event-card');
     const caption = card?.querySelector('.event-title')?.textContent?.trim() || '';
     openLB(img.getAttribute('src'), caption);

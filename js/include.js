@@ -14,5 +14,4 @@ async function includeHTML() {
   }
 }
 
-// Run after page load
 document.addEventListener('DOMContentLoaded', includeHTML);

@@ -29,5 +29,10 @@ Use the Nginx host name `inv_app` from within the same Docker network (ports are
 - `DELETE /misc/{name}`
 
 ## Examples
-- Public list: `curl http://inv_app/api/public/shishas`
-- Authorized: `curl -H "X-Password: PASSWORD_HERE" http://inv_app/api/state`
+- Public shisha list (no auth needed):
+  - Request: `curl -s http://inv_app/api/public/shishas`
+  - Sample response:
+    ```json
+    {"shishas":[{"name":"Watermelon","packSize":100,"gramsPerServe":30,"gramsRemaining":100}]}
+    ```
+- Authorized state snapshot: `curl -H "X-Password: PASSWORD_HERE" http://inv_app/api/state`

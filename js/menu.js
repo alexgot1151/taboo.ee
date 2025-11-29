@@ -1,106 +1,92 @@
 (function () {
-  const lb = document.getElementById('lightbox');
-  if (!lb) return;
+  const lightbox = document.getElementById('lightbox');
+  if (!lightbox) return;
 
-  const lbImg = document.getElementById('lightboxImg');
-  const lbCap = document.getElementById('lightboxCaption');
-  const lbClose = lb.querySelector('.lightbox-close');
+  const lightboxImg = document.getElementById('lightboxImg');
+  const lightboxCaption = document.getElementById('lightboxCaption');
+  const closeButton = lightbox.querySelector('.lightbox-close');
 
-  function openLB(src, caption) {
-    lbImg.src = src;
-    lbImg.alt = caption || 'Menu page';
-    lbCap.textContent = caption || '';
-    lb.classList.add('open');
-  }
-  function closeLB() { lb.classList.remove('open'); }
+  const close = () => lightbox.classList.remove('open');
 
-  lb.addEventListener('click', (e) => { if (e.target === lb) closeLB(); });
-  if (lbClose) lbClose.addEventListener('click', closeLB);
-  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeLB(); });
+  const open = (src, caption) => {
+    if (!src) return;
+    lightboxImg.src = src;
+    lightboxImg.alt = caption || 'Menu page';
+    lightboxCaption.textContent = caption || '';
+    lightbox.classList.add('open');
+  };
 
-  document.addEventListener('click', (e) => {
-    const img = e.target.closest('.menu-shot img');
+  lightbox.addEventListener('click', (event) => {
+    if (event.target === lightbox) close();
+  });
+  closeButton?.addEventListener('click', close);
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape') close();
+  });
+  document.addEventListener('click', (event) => {
+    const img = event.target.closest('.menu-shot img');
     if (!img) return;
-    openLB(img.getAttribute('src'), img.getAttribute('alt'));
+    open(img.getAttribute('src'), img.getAttribute('alt'));
   });
 })();
 
 (function () {
-  const list = document.getElementById('shishaList');
-  if (!list) return;
+  const listEl = document.getElementById('shishaList');
+  if (!listEl) return;
 
   const API_BASE = 'http://inv_app/api';
-  const envPasswordPromise = loadEnvPassword();
+  const SHISHA_ENDPOINT = `${API_BASE}/public/shishas`;
 
-  const setStatus = (msg) => {
-    list.innerHTML = `<div class="shisha-list__status">${msg}</div>`;
+  const renderStatus = (text) => {
+    listEl.innerHTML = `<div class="shisha-list__status">${text}</div>`;
   };
 
-  async function loadEnvPassword() {
+  const renderFlavours = (items) => {
+    listEl.innerHTML = '';
+    items.forEach((item) => {
+      const pill = document.createElement('div');
+      pill.className = 'shisha-pill';
+      pill.textContent = item.name;
+      listEl.appendChild(pill);
+    });
+  };
+
+  const normalizeShisha = (item) => {
+    if (!item || typeof item.name !== 'string') return null;
+    const name = item.name.trim();
+    const packSize = Number(item.packSize);
+    const gramsPerServe = Number(item.gramsPerServe);
+    const gramsRemaining = Number(item.gramsRemaining);
+    if (![packSize, gramsPerServe, gramsRemaining].every(Number.isFinite)) return null;
+    return { name, packSize, gramsPerServe, gramsRemaining };
+  };
+
+  const onlyServeable = (items) =>
+    items.filter((item) => item.gramsRemaining >= item.gramsPerServe && item.name);
+
+  async function loadShishaFlavours() {
+    renderStatus('Loading flavours…');
+
     try {
-      const res = await fetch('./.env', { cache: 'no-store' });
-      if (!res.ok) throw new Error('No .env file served');
+      const response = await fetch(SHISHA_ENDPOINT, { cache: 'no-store' });
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
 
-      const text = await res.text();
-      const match = text.match(/^\s*INV_API_PASSWORD\s*=\s*(.+)\s*$/m);
-      if (match) return match[1].trim().replace(/^['"]|['"]$/g, '');
-    } catch (err) {
-      console.warn('Could not load .env for API password', err);
-    }
+      const payload = await response.json();
+      const shishas = Array.isArray(payload?.shishas) ? payload.shishas : [];
+      const cleaned = shishas.map(normalizeShisha).filter(Boolean);
+      const available = onlyServeable(cleaned);
 
-    return (typeof window !== 'undefined' && window.INV_API_PASSWORD) || null;
-  }
-
-  async function loadShishas() {
-    setStatus('Loading flavours…');
-
-    let password = null;
-    try {
-      password = await envPasswordPromise;
-      const headers = password ? { 'X-Password': password } : undefined;
-
-      const response = await fetch(`${API_BASE}/public/shishas`, {
-        headers,
-      });
-      if (!response.ok) {
-        const err = new Error('Failed to load shisha flavours');
-        err.status = response.status;
-        throw err;
-      }
-
-      const data = await response.json();
-      const shishas = Array.isArray(data?.shishas) ? data.shishas : [];
-
-      const toDisplay = shishas.filter((item) => {
-        if (!item || typeof item.name !== 'string') return false;
-        const serve = Number(item.gramsPerServe);
-        const remaining = Number(item.gramsRemaining);
-        return Number.isFinite(serve) && Number.isFinite(remaining) && serve > remaining;
-      });
-
-      if (!toDisplay.length) {
-        setStatus('No shisha flavours to display right now.');
+      if (!available.length) {
+        renderStatus('No shisha flavours to display right now.');
         return;
       }
 
-      list.innerHTML = '';
-      toDisplay.forEach(({ name }) => {
-        const pill = document.createElement('div');
-        pill.className = 'shisha-pill';
-        pill.textContent = name;
-        list.appendChild(pill);
-      });
-    } catch (err) {
-      console.error(err);
-      const message =
-        err?.status === 401 || err?.status === 403
-          ? 'Could not load shisha flavours (check INV_API_PASSWORD in .env).'
-          : !password
-            ? 'Could not load shisha flavours (missing INV_API_PASSWORD in .env).'
-            : 'Could not load shisha flavours. Please try again in a moment.';
-      setStatus(message);
+      renderFlavours(available);
+    } catch (error) {
+      console.error('Failed to load shisha flavours', error);
+      renderStatus('Could not load shisha flavours. Please try again shortly.');
     }
   }
 
-  loadShishas();
+  loadShishaFlavours();
 })();

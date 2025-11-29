@@ -29,16 +29,44 @@
   const list = document.getElementById('shishaList');
   if (!list) return;
 
+  const API_BASE = 'http://inv_app/api';
+  const envPasswordPromise = loadEnvPassword();
+
   const setStatus = (msg) => {
     list.innerHTML = `<div class="shisha-list__status">${msg}</div>`;
   };
 
+  async function loadEnvPassword() {
+    try {
+      const res = await fetch('./.env', { cache: 'no-store' });
+      if (!res.ok) throw new Error('No .env file served');
+
+      const text = await res.text();
+      const match = text.match(/^\s*INV_API_PASSWORD\s*=\s*(.+)\s*$/m);
+      if (match) return match[1].trim().replace(/^['"]|['"]$/g, '');
+    } catch (err) {
+      console.warn('Could not load .env for API password', err);
+    }
+
+    return (typeof window !== 'undefined' && window.INV_API_PASSWORD) || null;
+  }
+
   async function loadShishas() {
     setStatus('Loading flavours…');
 
+    let password = null;
     try {
-      const response = await fetch('http://inv_app/api/public/shishas');
-      if (!response.ok) throw new Error('Failed to load shisha flavours');
+      password = await envPasswordPromise;
+      const headers = password ? { 'X-Password': password } : undefined;
+
+      const response = await fetch(`${API_BASE}/public/shishas`, {
+        headers,
+      });
+      if (!response.ok) {
+        const err = new Error('Failed to load shisha flavours');
+        err.status = response.status;
+        throw err;
+      }
 
       const data = await response.json();
       const shishas = Array.isArray(data?.shishas) ? data.shishas : [];
@@ -64,7 +92,13 @@
       });
     } catch (err) {
       console.error(err);
-      setStatus('Could not load shisha flavours. Please try again in a moment.');
+      const message =
+        err?.status === 401 || err?.status === 403
+          ? 'Could not load shisha flavours (check INV_API_PASSWORD in .env).'
+          : !password
+            ? 'Could not load shisha flavours (missing INV_API_PASSWORD in .env).'
+            : 'Could not load shisha flavours. Please try again in a moment.';
+      setStatus(message);
     }
   }
 

@@ -10,3 +10,8 @@ STDIN
 *.tif
 *.tiff
 *.heic
+
+# Environment secrets
+.env
+.env.*
+!.env.example

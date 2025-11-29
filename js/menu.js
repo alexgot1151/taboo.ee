@@ -37,7 +37,7 @@
     setStatus('Loading flavours…');
 
     try {
-      const response = await fetch('http://inv_app_api:4000/api/public/shishas');
+      const response = await fetch('http://inv_app/api/public/shishas');
       if (!response.ok) throw new Error('Failed to load shisha flavours');
 
       const data = await response.json();

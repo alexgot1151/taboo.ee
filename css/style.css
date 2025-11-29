@@ -264,3 +264,52 @@ body{
   box-shadow:var(--shadow);
   background:rgba(0,0,0,.20);
 }
+
+.eyebrow{
+  margin:0 0 6px 0;
+  text-transform:uppercase;
+  letter-spacing:.14em;
+  font-size:11px;
+  color:var(--muted);
+}
+
+.shisha-board{
+  width:min(1100px,96vw);
+  margin:32px auto 0;
+  padding:18px 18px 14px;
+  border-radius:18px;
+  box-shadow:var(--shadow);
+}
+.shisha-board__head{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:12px;
+  margin-bottom:12px;
+}
+.shisha-board__head h2{margin:0;color:#fff}
+.shisha-list{
+  list-style:none;
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+  margin:0;
+  padding:0;
+}
+.shisha-pill{
+  padding:10px 12px;
+  border-radius:12px;
+  border:1px solid var(--glass-stroke);
+  background:linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02));
+  color:#fff;
+  box-shadow:0 8px 20px rgba(0,0,0,.24);
+}
+.shisha-list__status{
+  color:var(--muted);
+  padding:4px 0 10px;
+}
+
+@media (max-width: 640px){
+  .shisha-board{padding:16px}
+  .shisha-board__head{flex-direction:column;align-items:flex-start}
+}

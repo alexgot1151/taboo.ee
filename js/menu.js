@@ -34,7 +34,7 @@
   const listEl = document.getElementById('shishaList');
   if (!listEl) return;
 
-  const API_BASE = 'http://inv_app/api';
+  const API_BASE = (typeof window !== 'undefined' && window.INV_API_BASE) || '/api';
   const SHISHA_ENDPOINT = `${API_BASE}/public/shishas`;
 
   const renderStatus = (text) => {

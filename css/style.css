@@ -251,6 +251,44 @@ body{
 .menu-section{padding-top:70px}
 .menu-head{text-align:center}
 .menu-tip{color:var(--muted);margin-top:8px}
+.menu-language{
+  display:flex;
+  justify-content:flex-end;
+  align-items:center;
+  max-width:1100px;
+  margin:12px auto 6px;
+  padding:0 20px;
+}
+.menu-language__switch{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  padding:4px 8px;
+  border-radius:999px;
+  border:1px solid var(--glass-stroke);
+  background:linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.04));
+  box-shadow:0 6px 18px rgba(0,0,0,.28);
+}
+.menu-language__btn{
+  border:0;
+  background:transparent;
+  color:var(--muted);
+  padding:8px 12px;
+  border-radius:12px;
+  font:inherit;
+  cursor:pointer;
+  transition:color .15s, background .15s, box-shadow .15s;
+}
+.menu-language__btn:hover{color:#fff}
+.menu-language__btn.is-active{
+  background:var(--pink);
+  color:#fff;
+  box-shadow:0 8px 18px rgba(194,76,142,.45);
+}
+.menu-language__divider{
+  color:var(--muted);
+  user-select:none;
+}
 .menu-stack{display:flex;flex-direction:column;gap:26px;align-items:center;margin-top:20px}
 .menu-shot{margin:0;width:min(1200px,98vw)}
 .menu-shot img{
@@ -315,6 +353,7 @@ body{
 }
 
 @media (max-width: 640px){
+  .menu-language{justify-content:center}
   .shisha-board{padding:16px}
   .shisha-board__head{align-items:center}
 }

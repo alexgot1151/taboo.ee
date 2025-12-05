@@ -31,6 +31,91 @@
 })();
 
 (function () {
+  const languageButtons = Array.from(document.querySelectorAll('.menu-language__btn'));
+  const menuImages = Array.from(document.querySelectorAll('.menu-shot img'));
+  if (!languageButtons.length || !menuImages.length) return;
+
+  const MENU_VARIANTS = {
+    en: [
+      'assets/menu/menu1.jpg',
+      'assets/menu/menu2.jpg',
+      'assets/menu/menu3.jpg',
+      'assets/menu/menu4.jpg',
+      'assets/menu/menu5.jpg',
+    ],
+    et: [
+      'assets/menu/menu_ee1.jpg',
+      'assets/menu/menu_ee2.jpg',
+      'assets/menu/menu_ee3.jpg',
+      'assets/menu/menu_ee4.jpg',
+      'assets/menu/menu_ee5.jpg',
+    ],
+  };
+
+  const ALT_LABEL = {
+    en: 'Taboo menu page',
+    et: 'Taboo menüü leht',
+  };
+
+  let activeLang = 'en';
+  const storageKey = 'tabooMenuLang';
+
+  const updateButtons = (lang) => {
+    languageButtons.forEach((btn) => {
+      const isActive = btn.dataset.lang === lang;
+      btn.classList.toggle('is-active', isActive);
+      btn.setAttribute('aria-pressed', isActive ? 'true' : 'false');
+    });
+  };
+
+  const applyLanguage = (lang) => {
+    const sources = MENU_VARIANTS[lang];
+    if (!sources) return;
+    activeLang = lang;
+    menuImages.forEach((img, index) => {
+      const src = sources[index];
+      if (src) img.src = src;
+      const baseAlt = ALT_LABEL[lang] || 'Menu page';
+      img.alt = `${baseAlt} ${index + 1}`;
+    });
+  };
+
+  const setLanguage = (lang) => {
+    if (!MENU_VARIANTS[lang]) return;
+    applyLanguage(lang);
+    updateButtons(lang);
+    try {
+      localStorage.setItem(storageKey, lang);
+    } catch (error) {
+      // Best-effort; ignore storage errors.
+    }
+  };
+
+  const savedLang = (() => {
+    try {
+      const stored = localStorage.getItem(storageKey);
+      if (stored && MENU_VARIANTS[stored]) return stored;
+    } catch (error) {
+      // Ignore storage access errors.
+    }
+    const preset = languageButtons.find((btn) => btn.classList.contains('is-active'));
+    if (preset && MENU_VARIANTS[preset.dataset.lang]) return preset.dataset.lang;
+    return activeLang;
+  })();
+
+  setLanguage(savedLang);
+
+  document.addEventListener('click', (event) => {
+    const btn = event.target.closest('.menu-language__btn');
+    if (!btn) return;
+
+    const lang = btn.dataset.lang;
+    if (!lang || lang === activeLang) return;
+    setLanguage(lang);
+  });
+})();
+
+(function () {
   const listEl = document.getElementById('shishaList');
   if (!listEl) return;
 

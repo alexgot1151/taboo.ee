@@ -27,5 +27,15 @@
     "cover": "assets/gallery/martini_night.png",
     "excerpt": "Pick your martini and own the night every Thursday.",
     "tags": ["Fun"]
+  },
+  {
+    "id": "brazilian_2025_2",
+    "title": "Brazilian Night 2025",
+    "start": "2025-12-13T22:00",
+    "end": "2025-12-14T03:00",
+    "location": "Taboo, Akadeemia tee 24",
+    "cover": "assets/gallery/brazilian_2025/brazilian2.jpg",
+    "excerpt": "Let's samba with Sambaki",
+    "tags": ["Live Music","Band"]
   }
 ]
